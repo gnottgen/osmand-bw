@@ -1,0 +1,1 @@
+Customizes OSM AND style for Bergwacht Sachsen use.
