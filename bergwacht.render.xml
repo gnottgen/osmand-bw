@@ -36,7 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     -->
 
 	<!-- "Details" preferences -->
-	<!-- <renderingProperty attr="emergencyAccessPoints" name="Notrufstandorte" description="Notrufstandorte anzeigen" type="boolean" category="details"/> -->
+	<renderingProperty attr="emergencyAccessPoints" name="Notrufstandorte" description="Notrufstandorte anzeigen" type="boolean" category="details"/>
     <renderingProperty attr="trackLowzoom" name="Wege (niedrige Zoomstufe)" description="Wege bei niedriger Zoomstufe anzeigen" type="boolean" category="details"/>
     <!--<renderingProperty attr="peaks" name="Klettergipfel" description="Klettergipfel anzeigen" type="boolean" category="details"/>-->
 
@@ -46,19 +46,34 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Variables
     =========
     -->
+    <!--
+    <renderingAttribute name="tourismTextColor">
+		<case attrColorValue="#ff0000"/>
+	</renderingAttribute>
+    -->
+    
 
     <!--
     Modify Properties and colors
     ============================
     -->
+    
+    <!-- Emergency Access points emergencyAccessPoints="true" tag="highway" value="emergency_access_point" -->
+    <point>
+        <case emergencyAccessPoints="true" tag="highway" value="emergency_access_point">
+            <apply_if minzoom="15" shield="red_round_shield" iconVisibleSize="26" icon="emergency_access_point" iconOrder="20" order="200" />
+        </case>
+    </point>
+    <!--<text>
+        <case tag="tourism" value="information">        
+            <apply_if additional="information=guidepost" textColor="#ffff00" textHaloColor="#0000ff" />
+        </case>   
+    </text>  -->
+
 
 
     <!-- ObjectType: 2 -->
-    <line>    
-       <!-- <switch>
-            <case  tag="highway" value="track"/>
-            <apply_if minzoom="16" color_5="#ff0000"/>
-        </switch>  works -->
+    <line>
         <case tag="highway" value="track" strokeWidth="1.2:1" pathEffect="">
             <apply color_5="#ffffff"/>
             <case minzoom="12" maxzoom="13" trackLowzoom="true">
