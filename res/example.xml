@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="utf-8"?>
+<renderingStyle name="Pokémon GO nest finder" version="1.1" depends="">
+
+	<!--
+
+	Pokémon GO nest finder, version 1.1
+	Updated 25 Jan 2017 by https://www.reddit.com/user/Rofang/
+
+	[ History ]
+
+		* version 1.1 changed natural=scrub to a nest candidate
+
+	[ What this file does ]
+
+		This file changes the appearance of maps in OsmAnd (an app which
+		downloads OpenStreetMap data for offline viewing). Maps are recolored
+		to highlight areas which may be of interest in Pokémon GO.
+
+	[ How to use this file ]
+
+		1) Install OsmAnd on your device and let the app download relevant maps
+			for your area.
+		2) Copy this file to the OsmAnd rendering folder on your device.
+			* On Android, this may be [storage]/android/data/net.osmand.plus/
+				files/rendering
+		3) Restart OsmAnd. Click the menu button in the lower left and select
+			"Configure map."
+		4) Scroll to the "Map Rendering" section and click the "Map style"
+			setting. Choose "PoGo nest finder."
+		5) Further down in the "Map Rendering" section, configure settings to
+			your liking in the "Details" and "Hide" submenus.
+
+	-->
+
+	<!--
+
+	[ Preferences ]
+
+		The following preferences may be toggled by the user in the "Configure
+		map" menu.
+
+	-->
+
+	<!-- Hard-coded preferences (copied as-is from default.render.xml) -->
+	<renderingProperty attr="appMode" name="Rendering mode" description="Map optimization for respective User Profile" type="string" possibleValues="browse map,car,bicycle,pedestrian"/>
+	<renderingProperty attr="currentTrackColor" name="Current GPX color" description="Color of the currently recording track" type="string" possibleValues="red,orange,lightblue,blue,purple,translucent_red,translucent_orange,translucent_lightblue,translucent_blue,translucent_purple" defaultValueDescription="default"/>
+	<renderingProperty attr="currentTrackWidth" name="Current GPX width" description="Width of the currently recording track" type="string" possibleValues="thin,medium,bold" defaultValueDescription="default"/>
+
+	<!-- "Details" preferences -->
+	<renderingProperty attr="distinguishWeakNests" name="Strong/weak nest distinction" description="Display land types less likely to be nests in a different color" type="boolean" category="details"/>
+	<renderingProperty attr="highlightFootways" name="Footway highlighting" description="Add highlight to footways where more Pokémon may spawn" type="boolean" category="details"/>
+	<renderingProperty attr="showElectric" name="Electric biomes and power lines" description="Show power lines and apply coloring to suspected electric biomes" type="boolean" category="details"/>
+	<renderingProperty attr="showHighwayNames" name="Highway labels" description="Show text labels for major highways" type="boolean" category="details"/>
+	<renderingProperty attr="showNestNames" name="Park labels" description="Show text labels for parks and similar areas" type="boolean" category="details"/>
+
+	<!-- "Hide" preferences -->
+	<renderingProperty attr="hideRoadBorders" name="Road/path borders" description="Suppress display of road/path borders" type="boolean" category="hide"/>
+	<renderingProperty attr="hideParkingAisles" name="Parking aisles" description="Suppress display of parking aisles" type="boolean" category="hide"/>
+	<renderingProperty attr="hideTheBuildings" name="Buildings" description="Suppress display of buildings" type="boolean" category="hide"/><!-- renamed so as not to overlap a default preference -->
+	<renderingProperty attr="hideBarriers" name="Barriers and free-standing walls" description="Suppress display of free-standing walls and other barriers" type="boolean" category="hide"/>
+	<renderingProperty attr="hideRailroads" name="Railroad tracks" description="Suppress display of railroad tracks" type="boolean" category="hide"/>
+	<renderingProperty attr="hideAdminboundaries" name="Admin boundaries" description="Suppress display of boundaries between large administrative levels" type="boolean" category="hide"/><!-- renamed so as not to overlap a default preference -->
+
+	<!-- Other preferences -->
+	<renderingProperty attr="wetlandDisplayType" name="Show wetlands as" description="How to display areas defined as wetlands" type="string" possibleValues="Pattern,Land" defaultValueDescription="Water (default)"/>
+
+	<!--
+
+	[ Variables ]
+
+		Variables can be referenced by setter parameters (see Tags section).
+
+	-->
+
+	<!-- Null color for hiding features -->
+	<renderingConstant name="null" value="#00ffffff"/>
+
+	<!-- Text colors -->
+	<renderingAttribute name="textColor">
+		<case attrColorValue="#000000">
+			<apply_if nightMode="true" attrColorValue="#ffffff"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="textOutlineColor">
+		<case attrColorValue="#ffffff">
+			<apply_if nightMode="true" attrColorValue="#000000"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Default land colors -->
+	<renderingAttribute name="defaultColor"><!-- this name is hard-coded -->
+		<case attrColorValue="#dff4cc">
+			<apply_if nightMode="true" attrColorValue="#42504a"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Water colors -->
+	<renderingAttribute name="waterColor">
+		<case attrColorValue="#13578c">
+			<apply_if nightMode="true" attrColorValue="#10253d"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Forest colors -->
+	<renderingAttribute name="forestColor">
+		<case attrColorValue="#67a146">
+			<apply_if nightMode="true" attrColorValue="#1a4621"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Road/path colors -->
+	<renderingAttribute name="roadColor">
+		<case attrColorValue="#a2beb2">
+			<apply_if nightMode="true" attrColorValue="#7a9793"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="roadBorderColor">
+		<case attrColorValue="#ebe675">
+			<apply_if nightMode="true" attrColorValue="#afba61"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="footwayColor">
+		<case attrColorValue="#97f55a">
+			<apply_if nightMode="true" attrColorValue="#6fca68"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Building/wall colors -->
+	<renderingAttribute name="buildingColor">
+		<case attrColorValue="#edf8e4">
+			<apply_if nightMode="true" attrColorValue="#64746b"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="wallColor">
+		<case attrColorValue="#b7d6ae">
+			<apply_if nightMode="true" attrColorValue="#91a79b"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Admin border colors -->
+	<renderingAttribute name="adminBorderColor">
+		<case attrColorValue="#aaad70c3">
+			<apply_if nightMode="true" attrColorValue="#aa9661a8"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Nest colors -->
+	<renderingAttribute name="nestColor">
+		<case attrColorValue="#acf57d">
+			<apply_if nightMode="true" attrColorValue="#5ba55f"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="weakNestColor">
+		<case attrColorValue="#c3f5a2">
+			<apply_if nightMode="true" attrColorValue="#588d58"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Electric biome colors -->
+	<renderingAttribute name="electricColor">
+		<case attrColorValue="#ebe7ab">
+			<apply_if nightMode="true" attrColorValue="#979d71"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="electricLineColor">
+		<case attrColorValue="#ebe675">
+			<apply_if nightMode="true" attrColorValue="#afba61"/>
+		</case>
+	</renderingAttribute>
+
+	<!-- Railroad colors -->
+	<renderingAttribute name="railroadColor">
+		<case attrColorValue="#9c9c9c">
+			<apply_if nightMode="true" attrColorValue="#2f3536"/>
+		</case>
+	</renderingAttribute>
+	<renderingAttribute name="railroadColor2">
+		<case attrColorValue="#dddddd">
+			<apply_if nightMode="true" attrColorValue="#a9b6b6"/>
+		</case>
+	</renderingAttribute>
+
+	<!--
+
+	[ Tags ]
+
+		The tags <switch>, <case>, and <apply> use setter parameters (below)
+		to apply styles to map elements; getter parameters determine which
+		elements the setters apply toward.
+
+		An element may match only one <switch> or <case> in a nesting group.
+		Once a match is found, any <apply> tags in that group are then run.
+
+		Setters in a <switch> tag are inherited by their child tags; if no
+		children within the <switch> have a match, the <switch>'s setters don't
+		activate, and the <switch> itself no longer counts as a match.
+
+	[ Getters ]
+
+		The most common getters are "tag" and "value", as in the following usage
+		(leave "value" empty for a wildcard search):
+			<case tag="highway" value="footway"/>
+
+		Additional getters:
+			* layer (-1, 0, or 1; flattened from element's OSM data)
+			* minzoom (true at specified zoom level or closer, up to 21)
+			* maxzoom (true at specified zoom level or further, down to 1)
+			* nightMode (true when app is in night mode)
+			* additional (finds tag=value pairs which have been transferred
+				into the "additional" field; see URL below)
+
+		Note that OsmAnd's map elements have been transformed and streamlined
+		according to the following instructions:
+			https://github.com/osmandapp/OsmAnd-resources/blob/master/obf_creation/rendering_types.xml
+
+	[ Setters ]
+
+		Setters are listed in subsequent sections. They may reference variables
+		defined in <renderingConstant> and <renderingAttribute> tags above.
+
+		Setters which have multiple values (i.e. color, color_2, color_3, etc.)
+		can use up to 8 different layers, listed here from bottom to top:
+			__2, __1, _0, (default), _2, _3, _4, _5
+
+	-->
+
+	<order>
+
+	<!--
+
+	[ Draw Order ]
+
+		The following entries determine which map elements are drawn on-screen
+		and in what order. Elements not listed here won't be drawn!
+
+		Setters for this section:
+			* objectType (draw as: 1 = point, 2 = line, 3 = polygon)
+			* order (bigger numbers draw on top; -1 to hide)
+			* ignorePolygonAsPointArea (true = draw polygon with the priorities
+				of a point)
+
+		Additional getters:
+			* point (true for node elements)
+			* cycle (true for closed way elements)
+			* area (true for filled closed way elements)
+
+	-->
+
+		<!-- Begin main Order switch -->
+		<switch>
+
+			<!-- Administrative borders -->
+			<switch hideAdminboundaries="false" order="100">
+				<switch point="false" objectType="2">
+					<case tag="admin_level" value="2" minzoom="2"/>
+					<case tag="admin_level" value="3" minzoom="4"/>
+					<case tag="admin_level" value="4" minzoom="4"/>
+				</switch>
+			</switch>
+
+			<!-- Power lines -->
+			<switch showElectric="true" order="99">
+				<switch point="false" objectType="2" minzoom="12">
+					<case tag="power" value="line"/>
+				</switch>
+			</switch>
+
+			<!-- Buildings/structures -->
+			<switch hideTheBuildings="false" order="70">
+				<switch cycle="true" objectType="3" minzoom="12">
+					<case tag="building" value="no" order="-1"/>
+					<case tag="building" value=""/>
+					<case tag="abandoned:building" value=""/>
+					<case tag="disused:building" value=""/>
+					<case tag="shop" value=""/>
+					<case tag="office" value=""/>
+					<case tag="historic" value=""/>
+					<case tag="man_made" value=""/>
+					<case tag="natural" value="stone"/>
+					<case tag="power" value="transformer"/>
+					<case tag="" value="" additional="covered=yes"/>
+				</switch>
+			</switch>
+
+			<!-- Barriers -->
+			<switch hideBarriers="false" order="69">
+				<switch area="true" objectType="3" minzoom="13">
+					<case tag="barrier" value="wall"/>
+					<case tag="barrier" value="yes"/>
+				</switch>
+				<switch point="false" area="false" objectType="2" minzoom="14">
+					<case tag="barrier" value="gate"/>
+					<case tag="barrier" value="wall"/>
+					<case tag="barrier" value="yes"/>
+					<case tag="natural" value="cliff"/>
+				</switch>
+			</switch>
+
+			<!-- Landscaping -->
+			<switch order="60">
+				<switch area="true" objectType="3" minzoom="13">
+					<case tag="barrier" value="hedge" hideBarriers="false"/>
+					<case tag="amenity" value="fountain"/>
+					<case tag="leisure" value="swimming_pool"/>
+				</switch>
+				<switch point="false" objectType="2" order="61" minzoom="14">
+					<case tag="natural" value="tree_row" hideBarriers="false"/>
+					<case tag="barrier" value="hedge" hideBarriers="false"/>
+				</switch>
+			</switch>
+
+			<!-- Roads/paths -->
+			<switch order="52">
+				<switch point="false" objectType="2">
+					<case tag="highway" value="motorway" order="59" minzoom="6"/>
+					<case tag="highway" value="trunk" order="58" minzoom="9"/>
+					<case tag="highway" value="primary" order="57" minzoom="11"/>
+					<case tag="highway" value="secondary" order="56" minzoom="12"/>
+					<case tag="highway" value="tertiary" order="55" minzoom="13"/>
+					<case tag="highway" value="pedestrian" order="50" minzoom="14"/>
+					<case tag="highway" value="footway" order="50" minzoom="14"/>
+					<case tag="highway" value="path" order="50" minzoom="14"/>
+					<case tag="highway" value="service" minzoom="13"/>
+					<case tag="highway" value="" minzoom="14"/>
+					<case tag="leisure" value="track" minzoom="14"/>
+				</switch>
+				<apply_if layer="-1" order="35"/>
+				<apply_if tag="highway" value="service" additional="service=parking_aisle" hideParkingAisles="true" order="-1"/>
+				<apply_if tag="highway" value="service" additional="service=parking_aisle" maxzoom="14" order="-1"/>
+			</switch>
+
+			<!-- Railroads -->
+			<switch hideRailroads="false" order="39">
+				<switch point="false" objectType="2" minzoom="13">
+					<case tag="railway" value="rail"/>
+					<case tag="railway" value="construction"/>
+					<case tag="railway" value="disused"/>
+					<case tag="railway" value="funicular"/>
+					<case tag="railway" value="light_rail"/>
+					<case tag="railway" value="miniature"/>
+					<case tag="railway" value="monorail"/>
+					<case tag="railway" value="narrow_gauge"/>
+					<case tag="railway" value="preserved"/>
+					<case tag="railway" value="tram"/>
+					<case tag="railway" value="subway" additional="tunnel=no"/>
+					<case tag="railway" value="subway" order="-1"/>
+				</switch>
+				<apply_if layer="-1" order="35"/>
+			</switch>
+
+			<!-- Bridges -->
+			<switch order="36">
+				<switch point="false" objectType="3" minzoom="13">
+					<case tag="man_made" value="bridge"/>
+				</switch>
+			</switch>
+
+			<!-- Above water -->
+			<switch order="31">
+				<switch point="false" objectType="3">
+					<case tag="place" value="island"/>
+					<case tag="place" value="islet"/>
+					<case tag="waterway" value="boatyard" minzoom="7"/>
+					<case tag="waterway" value="dam" minzoom="7"/>
+					<case tag="waterway" value="weir" minzoom="7"/>
+				</switch>
+			</switch>
+
+			<!-- Water (excluding oceans) -->
+			<switch order="30">
+				<switch cycle="true" objectType="3">
+					<case tag="natural" value="water" minzoom="3"/>
+					<case tag="waterway" value="" minzoom="8"/>
+					<case tag="landuse" value="reservoir" minzoom="11"/>
+					<case tag="landuse" value="basin" additional="basin=detention" order="-1"/>
+					<case tag="landuse" value="basin" minzoom="11"/>
+					<case tag="landuse" value="salt_pond" minzoom="11"/>
+					<case tag="natural" value="wetland" order="28" minzoom="10"/>
+				</switch>
+				<switch point="false" objectType="2" order="29">
+					<case tag="waterway" value="river" minzoom="7"/>
+					<case tag="waterway" value="" minzoom="12"/>
+				</switch>
+			</switch>
+
+			<!-- Land -->
+			<switch order="10">
+				<switch point="false" objectType="3">
+					<case tag="landuse" value="forest" minzoom="9"/>
+					<case tag="natural" value="wood" minzoom="9"/>
+					<case tag="natural" value="scrub" minzoom="11"/>
+					<case tag="leisure" value="park" minzoom="11"/>
+					<case tag="leisure" value="golf_course" minzoom="11"/>
+					<case tag="landuse" value="grass" minzoom="14"/>
+					<case tag="leisure" value="playground" minzoom="14"/>
+					<case tag="landuse" value="meadow" minzoom="14"/>
+					<case tag="landuse" value="recreation_ground" minzoom="13"/>
+					<case tag="leisure" value="pitch" minzoom="13" order="11"/>
+					<case tag="leisure" value="common" minzoom="13"/>
+					<case tag="leisure" value="garden" minzoom="13"/>
+					<case tag="leisure" value="dog_park" minzoom="13"/>
+					<case tag="leisure" value="nature_reserve" minzoom="6"/>
+					<case tag="boundary" value="national_park" minzoom="6" order="9"/>
+				</switch>
+			</switch>
+
+			<!-- Oceans -->
+			<switch order="3">
+				<switch area="true" objectType="3">
+					<case tag="natural" value="coastline"/>
+				</switch>
+			</switch>
+
+		</switch>
+		<!-- End main Order switch -->
+
+	</order>
+
+	<point>
+
+	<!--
+
+	[ Points ]
+
+		This section applies styles to elements tagged in the <order> section as
+		objectType 1.
+
+		Setters for points:
+			* shield (see https://github.com/osmandapp/OsmAnd-resources/tree/master/icons/svg/shields )
+			* icon (see https://github.com/osmandapp/OsmAnd-resources/tree/master/icons/svg )
+			* iconOrder (bigger = higher draw priority)
+			* iconVisibleSize (optional value for resizing the icon)
+			* disable ("true" hides element)
+
+		Unlike the standard 8-layer parameters, a point's icon only supports
+		6 layers (listed from bottom to top):
+			icon__1, icon, icon_2, icon_3, icon_4, icon_5
+
+	-->
+
+	</point>
+
+	<line>
+
+	<!--
+
+	[ Lines ]
+
+		This section applies styles to elements tagged in the <order> section as
+		objectType 2.
+
+		Setters for lines:
+			* color, color_2, color_3, etc.
+			* strokeWidth, strokeWidth_2, strokeWidth_3, etc.
+			* pathEffect, pathEffect_2, pathEffect_3, etc. (dashed lines)
+			* onewayArrowsColor (doesn't work on reversed one-way roads)
+			* shadowColor, shadowRadius (outline under the entire line layer)
+			* cap, cap_2, cap_3, etc. (line endings: BUTT, ROUND, or SQUARE)
+			* disable ("true" hides element)
+
+		Line-width setters allow two number values in the format a:b, where
+		"a" will scale with high-resolution displays, and "b" is an additional
+		number of unscaled pixels to add to "a". Plain numbers are read as a:0.
+
+		Dashed line setters use the format a_b, a_b_a_b, etc., where "a" is the
+		dash length and "b" is the gap length.
+
+	-->
+
+		<!-- Begin main Line switch -->
+		<switch>
+
+			<!-- How to render administrative border lines -->
+			<switch color="$adminBorderColor">
+				<case tag="admin_level" value="2" strokeWidth="6"/>
+				<case tag="admin_level" value="3" strokeWidth="5.5"/>
+				<case tag="admin_level" value="4" strokeWidth="5"/>
+			</switch>
+
+			<!-- How to render road/path lines -->
+			<switch color="$roadColor" cap="ROUND">
+				<case tag="highway" value="motorway"/>
+				<case tag="highway" value="trunk"/>
+				<case tag="highway" value="primary"/>
+				<case tag="highway" value="secondary"/>
+				<case tag="highway" value="footway"/>
+				<case tag="highway" value=""/>
+				<case tag="leisure" value="track"/>
+				<apply_if highlightFootways="true" tag="highway" value="footway" color_2="$footwayColor" pathEffect_2="6_2"/>
+				<apply_if hideRoadBorders="false" shadowColor="$roadBorderColor" shadowRadius="4"/>
+				<apply>
+					<case tag="highway" value="motorway" strokeWidth="6"/>
+					<case tag="highway" value="trunk" strokeWidth="5.5"/>
+					<case tag="highway" value="primary" strokeWidth="5"/>
+					<case tag="highway" value="secondary" strokeWidth="4.5"/>
+					<case strokeWidth="4" strokeWidth_2="3"/>
+				</apply>
+			</switch>
+
+			<!-- How to render railroad lines -->
+			<switch color="$railroadColor" color_2="$railroadColor2" pathEffect_2="4_4" strokeWidth="5" strokeWidth_2="4.5">
+				<case tag="railway" value=""/>
+			</switch>
+
+			<!-- How to render barrier lines -->
+			<switch strokeWidth="3">
+				<switch color="$forestColor">
+					<case tag="natural" value="tree_row"/>
+					<case tag="barrier" value="hedge"/>
+				</switch>
+				<switch color="$wallColor">
+					<case tag="barrier" value="gate"/>
+					<case tag="barrier" value="wall"/>
+					<case tag="barrier" value="yes"/>
+					<case tag="natural" value="cliff"/>
+				</switch>
+			</switch>
+
+			<!-- How to render power-line lines -->
+			<switch color="$electricLineColor" pathEffect="3_3" strokeWidth="2">
+				<case tag="power" value="line"/>
+			</switch>
+
+			<!-- How to render waterway lines -->
+			<switch color="$waterColor" cap="ROUND" onewayArrowsColor="$null">
+				<case tag="waterway" value="river"/>
+				<case tag="waterway" value=""/>
+				<apply>
+					<case tag="waterway" value="river" strokeWidth="4"/>
+					<case strokeWidth="2"/>
+				</apply>
+				<apply_if layer="-1" pathEffect="1_1"/>
+			</switch>
+
+			<!-- I'd like to hide all one-way arrows below, but OsmAnd won't apply this to additional="oneway=-1" elements for some reason. -->
+			<!--<apply onewayArrowsColor="$null"/>-->
+
+		</switch>
+		<!-- End main Line switch -->
+
+	</line>
+
+	<polygon>
+
+	<!--
+
+	[ Polygons ]
+
+		This section applies styles to elements tagged in the <order> section as
+		objectType 3.
+
+		Setters for polygons:
+			* color (polygon fill color)
+			* color_2, strokeWidth_2 (polygon border color, width)
+			* pathEffect_2 (dashed lines for polygon border)
+			* shader (optional fill pattern; see https://github.com/osmandapp/OsmAnd-resources/tree/master/icons/svg/shaders )
+			* disable ("true" hides element)
+
+	-->
+
+		<!-- Begin main Polygon switch -->
+		<switch>
+
+			<!-- Polygons using the primary nest color -->
+			<switch color="$nestColor">
+				<case tag="leisure" value="park"/>
+				<case tag="leisure" value="golf_course"/>
+				<case tag="landuse" value="grass"/>
+				<!-- if adding elements here, add them in <order> also -->
+			</switch>
+
+			<!-- Polygons using the weak nest color (or the primary nest color
+				if the distinguish option is disabled) -->
+			<switch color="$weakNestColor">
+				<case tag="leisure" value="playground"/>
+				<case tag="landuse" value="meadow"/>
+				<case tag="natural" value="scrub"/>
+				<case tag="landuse" value="recreation_ground"/>
+				<case tag="leisure" value="pitch"/>
+				<case tag="leisure" value="common"/>
+				<case tag="leisure" value="garden"/>
+				<case tag="leisure" value="nature_reserve"/>
+				<case tag="leisure" value="dog_park"/>
+				<case tag="boundary" value="national_park"/>
+				<!-- if adding elements here, add them in <order> also -->
+				<apply_if distinguishWeakNests="false" color="$nestColor"/>
+			</switch>
+
+			<!-- Polygons using the forest color -->
+			<switch color="$forestColor">
+				<case tag="landuse" value="forest"/>
+				<case tag="natural" value="wood"/>
+				<case tag="barrier" value="hedge"/>
+			</switch>
+
+			<!-- Polygons using the default land color -->
+			<switch color="$defaultColor">
+				<case tag="place" value="island"/>
+				<case tag="place" value="islet"/>
+				<case tag="waterway" value="boatyard"/>
+				<case tag="waterway" value="dam"/>
+				<case tag="waterway" value="weir"/>
+				<case tag="man_made" value="bridge"/>
+			</switch>
+
+			<!-- Polygons using the default water color -->
+			<switch color="$waterColor">
+				<case tag="natural" value="coastline"/>
+				<case tag="natural" value="water"/>
+				<case tag="waterway" value=""/>
+				<case tag="amenity" value="fountain"/>
+				<case tag="leisure" value="swimming_pool"/>
+				<case tag="landuse" value="reservoir"/>
+				<case tag="landuse" value="basin"/>
+				<case tag="landuse" value="salt_pond"/>
+			</switch>
+
+			<!-- How to render wetlands (user preference) -->
+			<switch tag="natural" value="wetland">
+				<case wetlandDisplayType="" color="$waterColor"/>
+				<case wetlandDisplayType="Pattern" shader="wetland"/>
+			</switch>
+
+			<!-- Polygons which render as man-made structures -->
+			<switch color="$buildingColor" color_2="$wallColor" strokeWidth_2="1.25">
+				<case tag="barrier" value="wall"/>
+				<case tag="barrier" value="yes"/>
+				<case tag="natural" value="stone"/>
+				<case tag="building" value=""/>
+				<case tag="abandoned:building" value=""/>
+				<case tag="disused:building" value=""/>
+				<case tag="shop" value=""/>
+				<case tag="office" value=""/>
+				<case tag="historic" value=""/>
+				<case tag="man_made" value="pier"/>
+				<case tag="man_made" value=""/>
+				<case tag="power" value="transformer"/>
+				<case tag="" value="" additional="covered=yes"/>
+				<!-- Structures to render as electric biomes -->
+				<apply_if showElectric="true">
+					<switch color="$electricColor">
+						<case tag="man_made" value="pier"/>
+						<!-- if adding elements, add them in <order> also -->
+					</switch>
+				</apply_if>
+			</switch>
+
+			<!-- Non-structure polygons to render as electric biomes -->
+			<switch showElectric="true" color="$electricColor">
+				<!-- if adding elements, add them in <order> also -->
+			</switch>
+
+		</switch>
+		<!-- End main Polygon switch -->
+
+	</polygon>
+
+	<text>
+
+	<!--
+
+	[ Text ]
+
+		This section applies styles to the text labels which accompany map
+		elements. Elements not listed here won't be labeled.
+
+		Setters for text:
+			* textColor, textSize, textHaloColor, textHaloRadius
+			* textBold, textItalic (both true/false)
+			* textOnPath (true/false), textDy (vertical offset)
+			* textWrapWidth (width before line wraps)
+			* textShield (see https://github.com/osmandapp/OsmAnd-resources/tree/master/icons/svg/road_shields )
+			* icon (see https://github.com/osmandapp/OsmAnd-resources/tree/master/icons/svg )
+			* iconOrder (bigger = higher icon draw priority)
+			* textOrder (bigger = higher text draw priority)
+			* textMinDistance (padding distance)
+			* nameTag2 (optional key to use for secondary display name)
+			* disable ("true" hides text)
+
+		Additional getters:
+			* textLength (character count)
+			* ref (to find only name labels of a specific type)
+
+	-->
+
+	<!-- Begin main Text switch -->
+	<switch>
+
+		<!-- Elements to label -->
+		<switch textOnPath="false" textColor="$textColor" textHaloRadius="1.5" textHaloColor="$textOutlineColor" textSize="11" textMinDistance="100" textWrapWidth="25">
+			<!-- Nests to label -->
+			<switch showNestNames="true" textOrder="50">
+				<case tag="leisure" value="park" textOrder="55"/>
+				<case tag="leisure" value="golf_course"/>
+				<case tag="leisure" value="playground"/>
+				<case tag="landuse" value="recreation_ground"/>
+				<case tag="leisure" value="common"/>
+				<case tag="leisure" value="garden"/>
+				<case tag="leisure" value="nature_reserve" textOrder="59"/>
+				<case tag="leisure" value="dog_park"/>
+				<case tag="boundary" value="national_park" textOrder="60"/>
+				<!-- add any other nest elements you'd like named -->
+			</switch>
+			<!-- Highways to label (using "ref" name tag) -->
+			<switch showHighwayNames="true" nameTag="ref" textOrder="30">
+				<case tag="highway" value="motorway" textOrder="37"/>
+				<case tag="highway" value="trunk" textOrder="36"/>
+				<case tag="highway" value="primary" textOrder="35"/>
+			</switch>
+		</switch>
+
+	</switch>
+	<!-- End main Text switch -->
+
+	</text>
+
+</renderingStyle>
